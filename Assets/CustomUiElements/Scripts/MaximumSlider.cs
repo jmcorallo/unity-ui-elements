@@ -1,70 +1,58 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class MaximumSlider : Slider
+namespace CustomUiElements
 {
-    public MinimumSlider MinSlider;
-    public Text Indicator;
-    public bool UseIndicator = true;
-
-    public float RealValue;
-    private bool assignedRealValue = false;
-
-    protected override void Start()    
+    public class MaximumSlider : Slider
     {
-        RealValue = maxValue;
-        base.Start();
-    }
+        public MinimumSlider MinSlider;
+        public Text Indicator;
+        public string NumberFormat;
 
-    protected override void Set(float input, bool sendCallback)
-    {
-        UseIndicator = true;
-        if (MinSlider == null)
-        {
-            foreach (Transform child in transform.parent)
-            {
-                if (child.gameObject.name != gameObject.name)
-                {
-                    MinSlider = child.GetComponent<MinimumSlider>();
-                }
-            }
-        }
-        if (UseIndicator && Indicator == null)
-        {
-            Indicator = transform.FindChild("Handle Slide Area").FindChild("Handle").FindChild("Indicator").gameObject.GetComponent<Text>();
-            if (Indicator == null)
-                Debug.Log(" es ull");
-            else
-                Debug.Log("no null");
-        }
-        if (!assignedRealValue)
+        public float RealValue;
+        private bool assignedRealValue = false;
+
+        protected override void Start()
         {
             RealValue = maxValue;
-            assignedRealValue = true;
-        }
-        else
-        {
-            RealValue = maxValue - input + minValue;
+            base.Start();
         }
 
-        if (wholeNumbers)
+        protected override void Set(float input, bool sendCallback)
         {
-            RealValue = Mathf.Round(RealValue);
-        }
-        if (RealValue <= MinSlider.value)
-        {
-            // invalid value
-            return;
-        }
-        if (UseIndicator)
-        {
-            Indicator.text = "" + RealValue;
-        }
-        base.Set(input, sendCallback);
-    }
+            if (MinSlider == null)
+            {
+                MinSlider = transform.parent.FindChild("MinSlider").GetComponent<MinimumSlider>();
+            }
+            if (!assignedRealValue)
+            {
+                RealValue = maxValue;
+                assignedRealValue = true;
+            }
+            else
+            {
+                RealValue = maxValue - input + minValue;
+            }
 
-    public void Refresh(float input)
-    {
-        Set(input, false);
+            if (wholeNumbers)
+            {
+                RealValue = Mathf.Round(RealValue);
+            }
+            if (RealValue <= MinSlider.value)
+            {
+                // invalid value
+                return;
+            }
+            if (Indicator != null)
+            {
+                Indicator.text = RealValue.ToString(NumberFormat);
+            }
+            base.Set(input, sendCallback);
+        }
+
+        public void Refresh(float input)
+        {
+            Set(input, false);
+        }
     }
 }

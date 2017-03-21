@@ -1,48 +1,41 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class MinimumSlider : Slider
+namespace CustomUiElements
 {
-    public MaximumSlider MaxSlider;
-    public Text Indicator;
-    public bool UseIndicator = true;
-
-    protected override void Set(float input, bool sendCallback)
+    public class MinimumSlider : Slider
     {
-        if (MaxSlider == null)
+        public MaximumSlider MaxSlider;
+        public Text Indicator;
+        public string NumberFormat;
+
+        protected override void Set(float input, bool sendCallback)
         {
-            foreach (Transform child in transform.parent)
+            if (MaxSlider == null)
             {
-                if (child.gameObject.name != gameObject.name)
-                {
-                    MaxSlider = child.GetComponent<MaximumSlider>();
-                }
+                MaxSlider = transform.parent.FindChild("MaxSlider").GetComponent<MaximumSlider>();
             }
-        }
-        if (UseIndicator && Indicator == null)
-        {
-            Indicator = transform.FindChild("Handle Slide Area").FindChild("Handle").FindChild("Indicator").gameObject.GetComponent<Text>();
+
+            float newValue = input;
+            if (wholeNumbers)
+            {
+                newValue = Mathf.Round(newValue);
+            }
+            if (newValue >= MaxSlider.RealValue && MaxSlider.RealValue != MaxSlider.minValue)
+            {
+                // invalid
+                return;
+            }
+            if (Indicator != null)
+            {
+                Indicator.text = newValue.ToString(NumberFormat);
+            }
+            base.Set(input, sendCallback);
         }
 
-        float newValue = input;
-        if (wholeNumbers)
+        public void Refresh(float input)
         {
-            newValue = Mathf.Round(newValue);
+            Set(input, false);
         }
-        if (newValue >= MaxSlider.RealValue && MaxSlider.RealValue != MaxSlider.minValue)
-        {
-            // invalid
-            return;
-        }
-        if (UseIndicator)
-        {
-            Indicator.text = "" + newValue;
-        }
-        base.Set(input, sendCallback);
-    }
-
-    public void Refresh(float input)
-    {
-        Set(input, false);
     }
 }

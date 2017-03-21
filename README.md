@@ -9,7 +9,7 @@ Feel free to fork and add your own!
 <img src="https://raw.githubusercontent.com/jmcorallo/unity-ui-elements/master/DemoScreenshots/ImageCarouselClosed.png" height="400" al="Image carousel closed">  <img src="https://github.com/jmcorallo/unity-ui-elements/blob/master/DemoScreenshots/ImageCarouselOpen.png" height="400" al="Image carousel open">
 
 ## Slider with max and min
-//TODO: upload sample image
+<img src="https://raw.githubusercontent.com/jmcorallo/unity-ui-elements/master/DemoScreenshots/MinMaxSlider.png" height="400" al="Min-Max slider">
 
 
 Made with Unity 5.5.1f1 Plus.
